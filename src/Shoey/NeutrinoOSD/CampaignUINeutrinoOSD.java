@@ -9,6 +9,7 @@ import com.fs.starfarer.api.combat.ViewportAPI;
 import com.fs.starfarer.api.ui.Alignment;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
+import org.lazywizard.lazylib.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -67,6 +68,19 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             }
             LabelAPI l = labels.get(i);
             String s = e.getName();
+            if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null)
+                s += " ("+e.getFaction().getEntityNamePrefix()+")";
+            if (showDistance) {
+                float dis = MathUtils.getDistance(player.getLocation(), e.getLocation());
+                String idist;
+                if (dis > 10000)
+                    idist = Math.round(dis / 1000)+"k";
+                else if (dis > 1000)
+                    idist = ""+(Math.round(dis / 100)*100);
+                else
+                    idist = ""+(Math.round(dis / 10)*10);
+                s += " (" + idist + ")";
+            }
             l.setText(s);
             l.autoSizeToWidth(l.computeTextWidth(s));
 
@@ -83,7 +97,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             if (l == labels.get(labels.size()-1) && entsDisplay.size() > labels.size())
             {
                 l.setColor(Global.getSettings().getColor("standardTextColor"));
-                l.setText(entsDisplay.size()+1-labels.size()+" more...");
+                l.setText(entsDisplay.size()-labels.size()+1+" more...");
             }
             l.render(1f);
             i++;

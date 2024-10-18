@@ -5,6 +5,7 @@ import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
+import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.lwjgl.util.vector.Vector2f;
@@ -16,20 +17,32 @@ import java.util.List;
 public class MainPlugin extends BaseModPlugin {
 
     public static Logger log = Global.getLogger(MainPlugin.class);
-    int labelsToMake = 6;
     public static List<LabelAPI> labels = new ArrayList<>();
     public static SectorAPI sector;
     public static Vector2f pL;
-    public static boolean showKnown = false;
+    static int labelsToMake = 6;
+    public static boolean showKnown = true;
+    public static boolean showDistance = true;
+    public static boolean showFaction = true;
+
+    public static void setLuna()
+    {
+        labelsToMake = LunaSettings.getInt("ShoeyNeutrinoOSD", "OSDCount");
+        labels.clear();
+        for (int c = 0; c < labelsToMake; c++)
+        {
+            labels.add(Global.getSettings().createLabel("", Fonts.ORBITRON_12));
+        }
+        showKnown = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showKnown");
+        showDistance = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showDistance");
+        showFaction = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showFaction");
+    }
 
     @Override
     public void onApplicationLoad() throws Exception {
         super.onApplicationLoad();
         log.setLevel(Level.INFO);
-        for (int c = 0; c < labelsToMake; c++)
-        {
-            labels.add(Global.getSettings().createLabel("", Fonts.ORBITRON_12));
-        }
+        setLuna();
     }
 
     @Override
