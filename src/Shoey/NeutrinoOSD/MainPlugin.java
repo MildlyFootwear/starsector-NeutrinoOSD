@@ -21,9 +21,7 @@ public class MainPlugin extends BaseModPlugin {
     public static SectorAPI sector;
     public static Vector2f pL;
     static int labelsToMake = 6;
-    public static boolean showKnown = true;
-    public static boolean showDistance = true;
-    public static boolean showFaction = true;
+    public static boolean showKnown, showDistance, showFaction, alignRight;
 
     public static int iLastCnt = 0;
 
@@ -38,6 +36,7 @@ public class MainPlugin extends BaseModPlugin {
         showKnown = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showKnown");
         showDistance = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showDistance");
         showFaction = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showFaction");
+        alignRight = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "alignRight");
         iLastCnt = 0;
     }
 

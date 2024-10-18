@@ -3,6 +3,7 @@ package Shoey.NeutrinoOSD;
 import Shoey.NeutrinoOSD.Util.sortDistance;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
+import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.listeners.CampaignUIRenderingListener;
 import com.fs.starfarer.api.combat.ViewportAPI;
@@ -43,7 +44,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             {
                 if (e.isVisibleToPlayerFleet() && !showKnown)
                     continue;
-                if (e.hasTag("planet"))
+                if (e.hasTag("planet") && e.getFaction() == null)
                     continue;
                 if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate")) {
                     entsDisplay.add(e);
@@ -67,13 +68,15 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             }
             LabelAPI l = labels.get(i);
             String s = e.getName();
-            if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null && e.getFaction().getEntityNamePrefix() != "" && e.getFaction().getEntityNamePrefix() != "Neutral")
+            if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null && !e.getFaction().getEntityNamePrefix().isEmpty() && !e.getFaction().getEntityNamePrefix().equals("Neutral"))
                 s += " ("+e.getFaction().getEntityNamePrefix()+")";
             if (showDistance) {
                 float dis = MathUtils.getDistance(player.getLocation(), e.getLocation());
                 String idist;
-                if (dis > 10000)
-                    idist = Math.round(dis / 2000)*2+"k";
+                if (dis > 25000)
+                    idist = (Math.round(dis / 2500)*2.5+"k").replace(".0","");
+                else if (dis > 10000)
+                    idist = Math.round(dis / 1000)+"k";
                 else if (dis > 1000)
                     idist = ""+(Math.round(dis / 100)*100);
                 else
@@ -88,15 +91,22 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             else
                 l.setColor(Global.getSettings().getColor("standardTextColor"));
 
-            if (i == 0)
-                l.getPosition().setLocation(880, 40);
-            else
-                l.getPosition().aboveLeft((UIComponentAPI) labels.get(i-1), 0);
-
             if (l == labels.get(labels.size()-1) && entsDisplay.size() > labels.size())
             {
                 l.setColor(Global.getSettings().getColor("standardTextColor"));
                 l.setText(entsDisplay.size()-labels.size()+1+" more...");
+                l.autoSizeToWidth(l.computeTextWidth(l.getText()));
+            }
+            if (i == 0) {
+                if (!alignRight)
+                    l.getPosition().setLocation(880, 40);
+                else
+                    l.getPosition().setLocation(877-l.getPosition().getWidth(), 143);
+            } else {
+                if (!alignRight)
+                    l.getPosition().aboveLeft((UIComponentAPI) labels.get(i - 1), 0);
+                else
+                    l.getPosition().aboveRight((UIComponentAPI) labels.get(i - 1), 0);
             }
             l.render(1f);
             i++;
@@ -106,7 +116,10 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             String s = "All detections known.";
             l.setText(s);
             l.autoSizeToWidth(l.computeTextWidth(s));
-            l.getPosition().setLocation(880, 40);
+            if (!alignRight)
+                l.getPosition().setLocation(880, 40);
+            else
+                l.getPosition().setLocation(880-l.getPosition().getWidth(), 40);
             l.render(1f);
         }
 
