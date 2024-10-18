@@ -20,6 +20,7 @@ public class MainPlugin extends BaseModPlugin {
     public static List<LabelAPI> labels = new ArrayList<>();
     public static SectorAPI sector;
     public static Vector2f pL;
+    public static boolean showKnown = false;
 
     @Override
     public void onApplicationLoad() throws Exception {

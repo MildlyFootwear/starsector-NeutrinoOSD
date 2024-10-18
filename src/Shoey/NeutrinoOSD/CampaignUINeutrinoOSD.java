@@ -41,15 +41,14 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             entsDisplay.clear();
             for (SectorEntityToken e : systemEnts)
             {
-                if (player.getFaction() != null && e.getFaction() == player.getFaction())
+                if (e.isVisibleToPlayerFleet() && !showKnown)
                     continue;
-                if (e.isVisibleToPlayerFleet())
+                if (e.hasTag("planet"))
                     continue;
                 if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate")) {
                     entsDisplay.add(e);
                     log.info("Added " + e.getName() + " to Neutrino OSD");
                 }
-
             }
             log.info(entsDisplay.size()+" entities are worth rendering out of "+ systemEnts.size());
         }
@@ -57,12 +56,15 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
         Collections.sort(entsDisplay, new sortDistance());
 
         int i = 0;
-        for (SectorEntityToken e : entsDisplay)
+        while (i < entsDisplay.size())
         {
-            if (e.isVisibleToPlayerFleet())
-                continue;
             if (i == labels.size())
                 break;
+            SectorEntityToken e = entsDisplay.get(i);
+            if (e.isVisibleToPlayerFleet() && !showKnown) {
+                entsDisplay.remove(e);
+                continue;
+            }
             LabelAPI l = labels.get(i);
             String s = e.getName();
             l.setText(s);
