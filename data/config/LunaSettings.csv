@@ -1,8 +1,8 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
-OSDCount,Number Shown,Int,7,,How many entities can be shown in the OSD.,2,12,
+OSDCount,Number Shown,Int,7,,How many entities can be shown in the OSD.,2,20,
 showKnown,Show Known,Boolean,FALSE,,"Lists known objects, such as those on the map or within sensor range, on the on-screen display.",,,
-showDistance,Show Distance,Boolean,FALSE,,Shows distance to the object in the on-screen display.,,,
+showDistance,Show Distance,Boolean,FALSE,,Shows approximate distance to the object in the on-screen display.,,,
 showFaction,Show Faction,Boolean,TRUE,,Shows the faction for the object in the on-screen display.,,,
 ,,,,,,,,
 AlignmentHeader,Alignment,Header,Alignment,,,,,
-alignRight,Align Right,Boolean,FALSE,,,,,
+alignRight,Above Hotbar,Boolean,FALSE,,"If enabled, the OSD will be moved to be ontop of the hotbar rather than beside it.",,,

@@ -46,7 +46,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
                     continue;
                 if (e.hasTag("planet") && e.getFaction() == null)
                     continue;
-                if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate")) {
+                if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate") || e.hasTag("neutrino_high")) {
                     entsDisplay.add(e);
                     log.info("Added " + e.getName() + " to Neutrino OSD");
                 }
