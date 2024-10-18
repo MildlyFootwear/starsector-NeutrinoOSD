@@ -43,7 +43,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             {
                 if (player.getFaction() != null && e.getFaction() == player.getFaction())
                     continue;
-                if (e.hasTag("planet") || e.isVisibleToPlayerFleet())
+                if (e.isVisibleToPlayerFleet())
                     continue;
                 if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate")) {
                     entsDisplay.add(e);
