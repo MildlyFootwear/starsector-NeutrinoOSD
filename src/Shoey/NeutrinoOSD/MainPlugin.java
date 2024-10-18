@@ -25,6 +25,8 @@ public class MainPlugin extends BaseModPlugin {
     public static boolean showDistance = true;
     public static boolean showFaction = true;
 
+    public static int iLastCnt = 0;
+
     public static void setLuna()
     {
         labelsToMake = LunaSettings.getInt("ShoeyNeutrinoOSD", "OSDCount");
@@ -36,6 +38,7 @@ public class MainPlugin extends BaseModPlugin {
         showKnown = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showKnown");
         showDistance = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showDistance");
         showFaction = LunaSettings.getBoolean("ShoeyNeutrinoOSD", "showFaction");
+        iLastCnt = 0;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class MainPlugin extends BaseModPlugin {
         super.onApplicationLoad();
         log.setLevel(Level.INFO);
         setLuna();
+        LunaSettings.addSettingsListener(new LunaListener());
     }
 
     @Override

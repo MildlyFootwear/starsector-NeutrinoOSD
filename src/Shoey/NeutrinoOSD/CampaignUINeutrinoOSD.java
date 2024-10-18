@@ -21,7 +21,6 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
 
     List<SectorEntityToken> systemEnts = new ArrayList<>();
     List<SectorEntityToken> entsDisplay = new ArrayList<>();
-    int iLastCnt = 0;
 
     void render()
     {
@@ -74,7 +73,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
                 float dis = MathUtils.getDistance(player.getLocation(), e.getLocation());
                 String idist;
                 if (dis > 10000)
-                    idist = Math.round(dis / 1000)+"k";
+                    idist = Math.round(dis / 2000)*2+"k";
                 else if (dis > 1000)
                     idist = ""+(Math.round(dis / 100)*100);
                 else

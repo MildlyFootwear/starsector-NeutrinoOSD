@@ -8,7 +8,7 @@ public class LunaListener implements LunaSettingsListener {
 
     @Override
     public void settingsChanged(String s) {
-        if (s.equals("ShoeyExtendedControls"))
+        if (s.equals("ShoeyNeutrinoOSD"))
         {
             setLuna();
         }

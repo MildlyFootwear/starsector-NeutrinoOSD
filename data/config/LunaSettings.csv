@@ -1,5 +1,5 @@
 fieldID,fieldName,fieldType,defaultValue,secondaryValue,fieldDescription,minValue,maxValue,tab
-OSDCount,Number Shown,Int,6,,How many entities can be shown in the OSD.,2,12,
-showKnown,Show Known,Boolean,FALSE,,"Lists known objects, such as those on the map or within sensor range, on the on-screen display. Disabled by default.",,,
-showDistance,Show Distance,Boolean,FALSE,,Shows distance to the object in the on-screen display. Disabled by default.,,,
-showFaction,Show Faction,Boolean,TRUE,,Shows the faction for the object in the on-screen display. Disabled by default.,,,
+OSDCount,Number Shown,Int,7,,How many entities can be shown in the OSD.,2,12,
+showKnown,Show Known,Boolean,FALSE,,"Lists known objects, such as those on the map or within sensor range, on the on-screen display.",,,
+showDistance,Show Distance,Boolean,FALSE,,Shows distance to the object in the on-screen display.,,,
+showFaction,Show Faction,Boolean,TRUE,,Shows the faction for the object in the on-screen display.,,,
