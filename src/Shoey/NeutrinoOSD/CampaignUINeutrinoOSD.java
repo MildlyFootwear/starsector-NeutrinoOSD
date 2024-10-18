@@ -67,7 +67,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             }
             LabelAPI l = labels.get(i);
             String s = e.getName();
-            if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null)
+            if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null && e.getFaction().getEntityNamePrefix() != "" && e.getFaction().getEntityNamePrefix() != "Neutral")
                 s += " ("+e.getFaction().getEntityNamePrefix()+")";
             if (showDistance) {
                 float dis = MathUtils.getDistance(player.getLocation(), e.getLocation());
