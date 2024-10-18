@@ -4,4 +4,4 @@ Adds an on-screen display while Neutrino Detector or Neutrino Detector Mk II are
 
 ### Requirements
 
-LazyLib
+LunaLib
