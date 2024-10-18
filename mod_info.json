@@ -1,11 +1,17 @@
 {
-    "id":"ShoeyNeutrinoOSD",
-	"name":"Neutrino OSD",
+	"id":"ShoeyNeutrinoOSD",
+	"name":"Shoey's Assorted Stuff - Neutrino OSD",
 	"author":"Shoey",
-    "utility":"true",
-    "version": { "major":"1", "minor": "0", "patch": "0" },
-	"description":"",
-    "gameVersion": "0.97a-RC11",
-  	"jars":["jars/NeutrinoOSD.jar"],
-  	"modPlugin":"Shoey.NeutrinoOSD.MainPlugin"
+	"utility":"true",
+	"version": { "major":"1", "minor": "0", "patch": "0" },
+	"description":"Adds an on-screen display that lists the names of all unfound entities in the system while Neutrino Detector or Neutrino Detector Mk II are active.",
+	"gameVersion": "0.97a-RC11",
+	"dependencies": [
+		{
+			"id": "lw_lazylib",
+			"name": "LazyLib"
+		}
+	],
+	"jars":["jars/NeutrinoOSD.jar"],
+	"modPlugin":"Shoey.NeutrinoOSD.MainPlugin"
 }
