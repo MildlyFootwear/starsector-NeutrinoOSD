@@ -119,7 +119,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             if (!alignRight)
                 l.getPosition().setLocation(880, 40);
             else
-                l.getPosition().setLocation(880-l.getPosition().getWidth(), 40);
+                l.getPosition().setLocation(880-l.getPosition().getWidth(), 143);
             l.render(1f);
         }
 
