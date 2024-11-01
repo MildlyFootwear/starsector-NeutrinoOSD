@@ -3,7 +3,7 @@
 	"name":"SAS - Neutrino OSD",
 	"author":"Shoey",
 	"utility":"true",
-	"version": { "major":"1", "minor": "0", "patch": "1" },
+	"version": { "major":"1", "minor": "1", "patch": "0" },
 	"description":"Adds an on-screen display that lists the names of all unfound entities in the system while Neutrino Detector or Neutrino Detector Mk II are active.",
 	"gameVersion": "0.97a-RC11",
 	"dependencies": [

@@ -13,6 +13,7 @@ import org.lazywizard.lazylib.MathUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import static Shoey.NeutrinoOSD.MainPlugin.*;
@@ -32,14 +33,22 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             iLastCnt = 0;
             return;
         }
-        if (!(player.hasAbility("gravitic_scan") && player.getAbility("gravitic_scan").isActive()) && !(player.hasAbility("neutrino_detector_mkII") && player.getAbility("neutrino_detector_mkII").isActive())) {
-            iLastCnt = 0;
-            return;
+
+        boolean sensorBurst = false;
+        boolean neutrinoDetector = false;
+        if ((player.hasAbility("gravitic_scan") && player.getAbility("gravitic_scan").isActive()) || (player.hasAbility("neutrino_detector_mkII") && player.getAbility("neutrino_detector_mkII").isActive())) {
+            neutrinoDetector = true;
         }
         boolean fleetMode = false;
         if (player.hasAbility("sensor_burst") && (player.getAbility("sensor_burst").isActiveOrInProgress() || player.getAbility("sensor_burst").isOnCooldown()))
         {
-            fleetMode = true;
+            sensorBurst = true;
+            if (neutrinoDetector && sensorBurstFleet)
+                fleetMode = true;
+        }
+        if (neutrinoDetector == false && !(sensorBurst == true && sensorBurstBypass)) {
+            iLastCnt = 0;
+            return;
         }
         if (fleetMode != lastFleetMode)
         {
@@ -75,17 +84,47 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
         Collections.sort(entsDisplay, new sortDistance());
 
         int i = 0;
-        while (i < entsDisplay.size())
+        HashMap<String, Integer> foundsMapCount = new HashMap<>();
+        List<SectorEntityToken> founds = new ArrayList<>();
+        for (int c = 0; c < entsDisplay.size(); c++)
         {
-            if (i == labels.size())
-                break;
-            SectorEntityToken e = entsDisplay.get(i);
-            if (e.isVisibleToPlayerFleet() && !showKnown) {
+            SectorEntityToken e = entsDisplay.get(c);
+            if (e.isPlayerFleet())
+                continue;
+            if (e.isVisibleToPlayerFleet() && !showKnown && !sensorBurst) {
                 entsDisplay.remove(e);
                 continue;
             }
-            LabelAPI l = labels.get(i);
-            String s = e.getName();
+            String s = e.getName() + " : "+e.getFaction().getEntityNamePrefix();
+            if (!foundsMapCount.containsKey(s))
+            {
+                foundsMapCount.put(s, 1);
+                founds.add(e);
+            } else
+            {
+                int temp = foundsMapCount.get(s)+1;
+                foundsMapCount.put(s, temp);
+            }
+        }
+        int displayedCount = 0;
+        int c = 0;
+        for (c = 0; c < labels.size() && c < founds.size(); c++)
+        {
+            LabelAPI l = labels.get(c);
+            SectorEntityToken e = founds.get(c);
+            String s = e.getName() + " : "+e.getFaction().getEntityNamePrefix();
+            if (condenseDuplicates) {
+                if (foundsMapCount.get(s) == 1) {
+                    s = e.getName();
+                    displayedCount++;
+                } else {
+                    displayedCount += foundsMapCount.get(s);
+                    s = e.getName() + " (x" + foundsMapCount.get(s) + ")";
+                }
+            } else {
+                displayedCount++;
+                s = e.getName();
+            }
             if (showFaction && e.getFaction() != null && e.getFaction().getEntityNamePrefix() != null && !e.getFaction().getEntityNamePrefix().isEmpty() && !e.getFaction().getEntityNamePrefix().equals("Neutral"))
                 s += " ("+e.getFaction().getEntityNamePrefix()+")";
             if (showDistance) {
@@ -109,28 +148,30 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             else
                 l.setColor(Global.getSettings().getColor("standardTextColor"));
 
-            if (l == labels.get(labels.size()-1) && entsDisplay.size() > labels.size())
+            if (l == labels.get(labels.size()-1) && entsDisplay.size()-displayedCount > labels.size())
             {
                 l.setColor(Global.getSettings().getColor("standardTextColor"));
-                l.setText(entsDisplay.size()-labels.size()+1+" more...");
+                l.setText((entsDisplay.size()-displayedCount)+" more...");
                 l.autoSizeToWidth(l.computeTextWidth(l.getText()));
             }
-            if (i == 0) {
+            if (c == 0) {
                 if (!alignRight)
                     l.getPosition().setLocation(880, 40);
                 else
                     l.getPosition().setLocation(877-l.getPosition().getWidth(), 143);
             } else {
                 if (!alignRight)
-                    l.getPosition().aboveLeft((UIComponentAPI) labels.get(i - 1), 0);
+                    l.getPosition().aboveLeft((UIComponentAPI) labels.get(c - 1), 0);
                 else
-                    l.getPosition().aboveRight((UIComponentAPI) labels.get(i - 1), 0);
+                    l.getPosition().aboveRight((UIComponentAPI) labels.get(c - 1), 0);
             }
             l.render(1f);
-            i++;
+
         }
-        if (i == 0) {
+
+        if (c == 0) {
             LabelAPI l = labels.get(0);
+            l.setColor(Global.getSettings().getColor("standardTextColor"));
             String s = "All detections known.";
             l.setText(s);
             l.autoSizeToWidth(l.computeTextWidth(s));
