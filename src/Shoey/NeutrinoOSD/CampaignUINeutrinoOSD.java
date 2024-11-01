@@ -3,11 +3,10 @@ package Shoey.NeutrinoOSD;
 import Shoey.NeutrinoOSD.Util.sortDistance;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
-import com.fs.starfarer.api.campaign.PlanetAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.listeners.CampaignUIRenderingListener;
 import com.fs.starfarer.api.combat.ViewportAPI;
-import com.fs.starfarer.api.ui.Alignment;
+import com.fs.starfarer.api.impl.campaign.ids.Tags;
 import com.fs.starfarer.api.ui.LabelAPI;
 import com.fs.starfarer.api.ui.UIComponentAPI;
 import org.lazywizard.lazylib.MathUtils;
@@ -22,6 +21,7 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
 
     List<SectorEntityToken> systemEnts = new ArrayList<>();
     List<SectorEntityToken> entsDisplay = new ArrayList<>();
+    boolean lastFleetMode = false;
 
     void render()
     {
@@ -36,22 +36,40 @@ public class CampaignUINeutrinoOSD implements CampaignUIRenderingListener {
             iLastCnt = 0;
             return;
         }
-        if (seSize != iLastCnt)
+        boolean fleetMode = false;
+        if (player.hasAbility("sensor_burst") && (player.getAbility("sensor_burst").isActiveOrInProgress() || player.getAbility("sensor_burst").isOnCooldown()))
         {
-            iLastCnt = seSize;
-            entsDisplay.clear();
-            for (SectorEntityToken e : systemEnts)
-            {
-                if (e.isVisibleToPlayerFleet() && !showKnown)
-                    continue;
-                if (e.hasTag("planet") && e.getFaction() == null)
-                    continue;
-                if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.getName().contains("Gate") || e.hasTag("neutrino_high")) {
-                    entsDisplay.add(e);
-                    log.info("Added " + e.getName() + " to Neutrino OSD");
+            fleetMode = true;
+        }
+        if (fleetMode != lastFleetMode)
+        {
+            lastFleetMode = fleetMode;
+            iLastCnt = 0;
+        }
+        if (!fleetMode) {
+            if (seSize != iLastCnt) {
+                iLastCnt = seSize;
+                entsDisplay.clear();
+                for (SectorEntityToken e : systemEnts) {
+                    if (e.isVisibleToPlayerFleet() && !showKnown) {
+                        continue;
+                    }
+                    if (e.hasTag("planet") && e.getFaction() == null) {
+                        continue;
+                    }
+                    if (e.hasTag("neutrino") || e.hasTag("neutrino_low") || e.hasTag("station") || e.hasTag("neutrino_high") || e.hasTag(Tags.GATE)) {
+                        entsDisplay.add(e);
+                        log.debug("Added " + e.getName() + " to Neutrino OSD");
+                    }
                 }
+                log.debug(entsDisplay.size() + " entities are worth rendering out of " + systemEnts.size());
             }
-            log.info(entsDisplay.size()+" entities are worth rendering out of "+ systemEnts.size());
+        } else {
+            if (seSize != iLastCnt) {
+                iLastCnt = seSize;
+                entsDisplay.clear();
+                entsDisplay.addAll(player.getContainingLocation().getFleets());
+            }
         }
         pL = player.getLocation();
         Collections.sort(entsDisplay, new sortDistance());

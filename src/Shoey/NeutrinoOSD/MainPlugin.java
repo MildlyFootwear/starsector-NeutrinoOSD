@@ -1,10 +1,10 @@
 package Shoey.NeutrinoOSD;
-import com.fs.starfarer.api.Global;
+
 import com.fs.starfarer.api.BaseModPlugin;
+import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.SectorAPI;
 import com.fs.starfarer.api.ui.Fonts;
 import com.fs.starfarer.api.ui.LabelAPI;
-import com.fs.starfarer.api.ui.UIComponentAPI;
 import lunalib.lunaSettings.LunaSettings;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
